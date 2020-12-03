@@ -1,15 +1,18 @@
 package com.urjc.books.models;
 
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
+    private int id;
     private String title;
     private String summary;
     private String author;
     private int postYear;
     private List<Comment> comments;
-
 }
