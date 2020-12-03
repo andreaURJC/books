@@ -27,7 +27,9 @@ public class CommentRepository {
     }
 
     public void save(Comment comment) {
-        comments.put(this.getIdAndAdd(), comment);
+        int commentId = this.getIdAndAdd();
+        comment.setId(commentId);
+        comments.put(commentId, comment);
     }
 
     public List<Comment> findByBookId(int bookId) {
