@@ -9,15 +9,23 @@ import java.util.List;
 
 @Service
 public class BookService {
-    @Autowired
+
     private BookRepository bookRepository;
+    private CommentService commentService;
+
+    public BookService(BookRepository bookRepository, CommentService commentService) {
+        this.bookRepository = bookRepository;
+        this.commentService = commentService;
+    }
 
     public List<Book> findAll() {
         return this.bookRepository.findAll();
     }
 
     public Book findById(int id) {
-        return this.bookRepository.findById(id);
+        Book book = this.bookRepository.findById(id);
+        book.setComments(this.commentService.findByBookId(book.getId()));
+        return book;
     }
 
     public Book delete(int id) {

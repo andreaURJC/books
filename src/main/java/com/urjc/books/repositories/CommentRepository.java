@@ -1,6 +1,7 @@
 package com.urjc.books.repositories;
 
 import com.urjc.books.models.Comment;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +9,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Repository
 public class CommentRepository {
 
-    private AtomicInteger atomicInteger;
+    private AtomicInteger atomicInt = new AtomicInteger();
     private ConcurrentMap<Integer, Comment> comments = new ConcurrentHashMap<Integer, Comment>();
 
     public CommentRepository() {
@@ -36,7 +38,7 @@ public class CommentRepository {
         List<Comment> comentariosEncontrados = new ArrayList<>();
 
         for (Comment comment : comments.values()) {
-            if (comment.isSameId(bookId)) {
+            if (comment.isSameBookId(bookId)) {
                 comentariosEncontrados.add(comment);
             }
         }
@@ -48,7 +50,7 @@ public class CommentRepository {
     }
 
 
-    public int getIdAndAdd() {
-        return atomicInteger.getAndAdd(1);
+    private int getIdAndAdd() {
+        return atomicInt.getAndAdd(1);
     }
 }

@@ -16,7 +16,7 @@ public class Comment {
     private int score;
     private int bookId;
 
-    public boolean isSameId(int id) {
-        return this.id == id;
+    public boolean isSameBookId(int bookId) {
+        return this.bookId == bookId;
     }
 }

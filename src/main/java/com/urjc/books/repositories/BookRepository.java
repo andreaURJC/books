@@ -10,8 +10,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class BookRepository {
-    private ConcurrentHashMap<Integer, Book> books = new ConcurrentHashMap<>();
+
     private final AtomicInteger atomicInt = new AtomicInteger();
+    private ConcurrentHashMap<Integer, Book> books = new ConcurrentHashMap<>();
 
     public BookRepository() {
         this.initBooks();
@@ -48,13 +49,13 @@ public class BookRepository {
                 "Summary del libro",
                 "Autor de kika superr bruja",
                 1990,
-                null);
+                new ArrayList<>());
         Book losPilaresDeLaTierraBook = new Book(getIdAndAdd(),
                 "Los pilares de la tierra",
                 "Novela ambientada en la edad media",
                 "Ken Follett",
                 1990,
-                null);
+                new ArrayList<>());
         books.put(kikaSuperBrujaBook.getId(), kikaSuperBrujaBook);
         books.put(losPilaresDeLaTierraBook.getId(), losPilaresDeLaTierraBook);
     }
