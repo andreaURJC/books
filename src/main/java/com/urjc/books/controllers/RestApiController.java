@@ -23,7 +23,7 @@ public class RestApiController {
         return this.bookService.findAll();
     }
 
-    @GetMapping("/book/{bookId}")
+    @GetMapping("/books/{bookId}")
     public Book getBook(@PathVariable Integer bookId) {
         return this.bookService.findById(bookId);
     }
