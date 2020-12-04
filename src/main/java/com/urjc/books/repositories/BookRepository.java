@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Repository
 public class BookRepository {
     private ConcurrentHashMap<Integer, Book> books = new ConcurrentHashMap<>();
-    private AtomicInteger atomicInt = new AtomicInteger();
+    private final AtomicInteger atomicInt = new AtomicInteger();
 
     public BookRepository() {
         this.initBooks();
