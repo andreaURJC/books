@@ -17,11 +17,11 @@ public class BookRepository {
         this.initBooks();
     }
 
-    List<Book> findAll() {
+    public List<Book> findAll() {
         return new ArrayList<>(this.books.values());
     }
 
-    Book findById(int id) {
+    public Book findById(int id) {
         if (this.books.get(id) == null) {
             return null;
         }
@@ -36,6 +36,10 @@ public class BookRepository {
         int id = this.getIdAndAdd();
         book.setId(id);
         this.books.put(id, book);
+    }
+
+    private int getIdAndAdd() {
+        return atomicInt.getAndAdd(1);
     }
 
     private void initBooks() {
@@ -54,9 +58,4 @@ public class BookRepository {
         books.put(kikaSuperBrujaBook.getId(), kikaSuperBrujaBook);
         books.put(losPilaresDeLaTierraBook.getId(), losPilaresDeLaTierraBook);
     }
-
-    private int getIdAndAdd() {
-        return atomicInt.getAndAdd(1);
-    }
-
 }
