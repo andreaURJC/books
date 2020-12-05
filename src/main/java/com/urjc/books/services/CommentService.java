@@ -18,4 +18,8 @@ public class CommentService {
     public List<Comment> findByBookId(int bookId) {
         return this.commentRepository.findByBookId(bookId);
     }
+
+    public Comment delete(int commentId) {
+        return this.commentRepository.delete(commentId);
+    }
 }

@@ -1,17 +1,25 @@
 package com.urjc.books.controllers;
 
 import com.urjc.books.models.Book;
+import com.urjc.books.models.Comment;
 import com.urjc.books.services.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.urjc.books.services.CommentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class WebController {
-    @Autowired
+
     private BookService bookService;
+    private CommentService commentService;
+
+    public WebController(BookService bookService, CommentService commentService) {
+        this.bookService = bookService;
+        this.commentService = commentService;
+    }
 
     @GetMapping("/home")
     public String getBooks(Model model) {
@@ -30,5 +38,11 @@ public class WebController {
         model.addAttribute("bookHasComments", book.hasComments());
         model.addAttribute("bookComments", book.getComments());
         return "book";
+    }
+
+    @GetMapping("/books/{bookId}/comments/{commentId}/delete")
+    public String deleteComment(Model model, @PathVariable Integer bookId, @PathVariable Integer commentId) {
+        this.commentService.delete(commentId);
+        return "redirect:/books/" + bookId + "/get";
     }
 }
