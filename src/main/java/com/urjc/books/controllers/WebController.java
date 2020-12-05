@@ -36,6 +36,11 @@ public class WebController {
         return "book";
     }
 
+    @GetMapping("/books/new")
+    public String createBookForm(Model model) {
+        return "create_book";
+    }
+
     @PostMapping("/books/post")
     public String createBook(Model model, Book book) {
         this.bookService.save(book);
