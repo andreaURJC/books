@@ -3,7 +3,12 @@
     <h2> Create new comment: </h2>
     <form action="/books/{{ bookId }}/comments/post" method="post">
         <p>Author:</p>
-        <input type='text' name='author'/>
+        {{ #user }}
+            <input type='text' name='author' value="{{ user }}"/>
+        {{ /user }}
+        {{ ^user}}
+            <input type='text' name='author'/>
+        {{ /user }}
         <p>Text:</p>
         <textarea name='text' rows=8 cols=50></textarea>
         <p>Score:</p>
