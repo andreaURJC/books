@@ -1,6 +1,7 @@
 package com.urjc.books.controllers;
 
 import com.urjc.books.models.Book;
+import com.urjc.books.models.Comment;
 import com.urjc.books.services.BookService;
 import com.urjc.books.services.CommentService;
 import org.springframework.stereotype.Controller;
@@ -50,6 +51,20 @@ public class WebController {
     @GetMapping("/books/{bookId}/comments/{commentId}/delete")
     public String deleteComment(Model model, @PathVariable Integer bookId, @PathVariable Integer commentId) {
         this.commentService.delete(commentId);
+        return "redirect:/books/" + bookId + "/get";
+    }
+
+    @GetMapping("/books/{bookId}/comments/new")
+    public String createCommentForm(Model model, @PathVariable Integer bookId) {
+        model.addAttribute("bookId", bookId);
+        model.addAttribute("urlRedirect", "/books/" + bookId + "/get");
+        //TODO añadir el user sesion
+        return "create_comment";
+    }
+
+    @PostMapping("/books/{bookId}/comments/post")
+    public String createBook(Model model, @PathVariable Integer bookId, Comment comment) {
+        this.commentService.save(comment);
         return "redirect:/books/" + bookId + "/get";
     }
 }

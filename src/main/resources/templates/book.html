@@ -2,11 +2,11 @@
 <head>
     <title>{{ bookTitle }}</title>
 </head>
-<body>
     <h1>{{ bookTitle }} - {{ bookAuthor }}</h1>
     <p>Summary: {{ bookSummary }}</p>
     <p>Year: {{ bookPostYear }}</p>
 
+    <a href="/books/{{bookId}}/comments/new">Add comment</a> <br>
     {{ #bookHasComments }}
         <h3>Comments</h3>
         {{ #bookComments }}

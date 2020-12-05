@@ -19,6 +19,10 @@ public class CommentService {
         return this.commentRepository.findByBookId(bookId);
     }
 
+    public void save(Comment comment) {
+        this.commentRepository.save(comment);
+    }
+
     public Comment delete(int commentId) {
         return this.commentRepository.delete(commentId);
     }
