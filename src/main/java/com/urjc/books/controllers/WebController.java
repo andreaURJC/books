@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -24,15 +25,16 @@ public class WebController {
         return "home_page_template";
     }
 
-    @GetMapping("/books/{bookId}")
-    public String getBook(Model model, Integer bookId) {
+    @GetMapping("/books/{bookId}/get")
+    public String getBook(Model model, @PathVariable Integer bookId) {
         Book book = this.bookService.findById(bookId);
-        model.addAttribute("id", book.getId());
-        model.addAttribute("title", book.getTitle());
-        model.addAttribute("summary", book.getSummary());
-        model.addAttribute("author", book.getAuthor());
-        model.addAttribute("postYear", book.getPostYear());
-        model.addAttribute("comments", book.getComments());
+        model.addAttribute("bookId", book.getId());
+        model.addAttribute("bookTitle", book.getTitle());
+        model.addAttribute("bookSummary", book.getSummary());
+        model.addAttribute("bookAuthor", book.getAuthor());
+        model.addAttribute("bookPostYear", book.getPostYear());
+        model.addAttribute("bookHasComments", book.hasComments());
+        model.addAttribute("bookComments", book.getComments());
         return "book";
     }
 }

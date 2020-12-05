@@ -17,15 +17,15 @@ public class CommentRepository {
 
     public CommentRepository() {
         int commentId = this.getIdAndAdd();
-        comments.put(commentId, new Comment(commentId, "Andrea", "Me encanta leer, pedazo de libro", 10, 0));
+        comments.put(commentId, new Comment(commentId, "Andrea", "Me encanta leer, pedazo de libro", 5, 0));
         commentId = this.getIdAndAdd();
-        comments.put(commentId, new Comment(commentId, "Juanma", "El mejor libro que he leído nunca", 2, 0));
+        comments.put(commentId, new Comment(commentId, "Juanma", "El mejor libro que he leído nunca", 1, 0));
         commentId = this.getIdAndAdd();
-        comments.put(commentId, new Comment(commentId, "Antonio", "Un poco rara la historio, pero entretenida", 7, 0));
+        comments.put(commentId, new Comment(commentId, "Antonio", "Un poco rara la historio, pero entretenida", 4, 0));
         commentId = this.getIdAndAdd();
-        comments.put(commentId, new Comment(commentId, "Nacho", "Buen libro para los viajes entre partido y partido", 8, 1));
+        comments.put(commentId, new Comment(commentId, "Nacho", "Buen libro para los viajes entre partido y partido", 4, 1));
         commentId = this.getIdAndAdd();
-        comments.put(commentId, new Comment(commentId, "Elisa", "Me ha ayudado mucho a relajarme", 9, 1));
+        comments.put(commentId, new Comment(commentId, "Elisa", "Me ha ayudado mucho a relajarme", 1, 1));
     }
 
     public void save(Comment comment) {

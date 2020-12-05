@@ -1,8 +1,10 @@
 package com.urjc.books.models;
 
 import lombok.*;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -16,4 +18,8 @@ public class Book {
     private String author;
     private int postYear;
     private List<Comment> comments;
+
+    public boolean hasComments() {
+        return !CollectionUtils.isEmpty(comments);
+    }
 }
