@@ -1,28 +1,24 @@
 <html>
 <head>
-    <title>{{ bookTitle }}</title>
+    <title>{{ book.title }}</title>
 </head>
 <body>
-    <h1>{{ bookTitle }} - {{ bookAuthor }}</h1>
-    <p>Summary: {{ bookSummary }}</p>
-    <p>Year: {{ bookPostYear }}</p>
-
-    {{ #bookHasComments }}
+    <h1>{{ book.title }} - {{ book.author }}</h1>
+    <p>Summary: {{ book.summary }}</p>
+    <p>Year: {{ book.postYear }}</p>
         <h3>Comments</h3>
-        {{ #bookComments }}
-        <ul>
-            <li>
-                <p>{{ author }}: {{ score }} ⭐</p>
-                <p>{{ text }}</p>
-                <p><a href="/books/{{ bookId }}/comments/{{ id }}/delete">Delete comment</a></p>
-            </li>
-        </ul>
-        {{ /bookComments }}
-    {{ /bookHasComments }}
-    {{ ^bookHasComments }}
-    <h3>No comments yet</h3>
-    {{ /bookHasComments }}
-
+        {{ #book.comments }}
+            <ul>
+                <li>
+                    <p>{{ author }}: {{ score }} ⭐</p>
+                    <p>{{ text }}</p>
+                    <p><a href="/books/{{ bookId }}/comments/{{ id }}/delete">Delete comment</a></p>
+                </li>
+            </ul>
+        {{ /book.comments }}
+        {{ ^book.comments }}
+        <p>No comments yet</p>
+        {{ /book.comments }}
     <a href="/">Return homepage</a>
 </body>
 </html>

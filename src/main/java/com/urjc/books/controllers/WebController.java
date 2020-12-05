@@ -31,13 +31,7 @@ public class WebController {
     @GetMapping("/books/{bookId}/get")
     public String getBook(Model model, @PathVariable Integer bookId) {
         Book book = this.bookService.findById(bookId);
-        model.addAttribute("bookId", book.getId());
-        model.addAttribute("bookTitle", book.getTitle());
-        model.addAttribute("bookSummary", book.getSummary());
-        model.addAttribute("bookAuthor", book.getAuthor());
-        model.addAttribute("bookPostYear", book.getPostYear());
-        model.addAttribute("bookHasComments", book.hasComments());
-        model.addAttribute("bookComments", book.getComments());
+        model.addAttribute("book", book);
         return "book";
     }
 
