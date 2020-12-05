@@ -20,8 +20,4 @@ public class Book {
     private String author;
     private int postYear;
     private List<Comment> comments = new ArrayList<>();
-
-    public boolean hasComments() {
-        return !CollectionUtils.isEmpty(comments);
-    }
 }

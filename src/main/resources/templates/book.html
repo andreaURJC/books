@@ -7,6 +7,7 @@
     <p>Summary: {{ book.summary }}</p>
     <p>Year: {{ book.postYear }}</p>
         <h3>Comments</h3>
+   		<a href="/books/{{bookId}}/comments/new">Add comment</a> <br>
         {{ #book.comments }}
             <ul>
                 <li>
