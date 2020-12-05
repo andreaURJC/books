@@ -46,4 +46,10 @@ public class WebController {
         this.bookService.save(book);
         return "redirect:/";
     }
+
+    @GetMapping("/books/{bookId}/comments/{commentId}/delete")
+    public String deleteComment(Model model, @PathVariable Integer bookId, @PathVariable Integer commentId) {
+        this.commentService.delete(commentId);
+        return "redirect:/books/" + bookId + "/get";
+    }
 }
