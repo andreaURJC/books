@@ -2,17 +2,25 @@ package com.urjc.books.controllers;
 
 import com.urjc.books.models.Book;
 import com.urjc.books.services.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.urjc.books.services.CommentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class WebController {
-    @Autowired
+
     private BookService bookService;
+    private CommentService commentService;
+
+    public WebController(BookService bookService, CommentService commentService) {
+        this.bookService = bookService;
+        this.commentService = commentService;
+    }
 
     @GetMapping("/")
     public String getBooks(Model model) {
@@ -21,14 +29,15 @@ public class WebController {
     }
 
     @GetMapping("/books/{bookId}/get")
-    public String getBook(Model model, Integer bookId) {
+    public String getBook(Model model, @PathVariable Integer bookId) {
         Book book = this.bookService.findById(bookId);
-        model.addAttribute("id", book.getId());
-        model.addAttribute("title", book.getTitle());
-        model.addAttribute("summary", book.getSummary());
-        model.addAttribute("author", book.getAuthor());
-        model.addAttribute("postYear", book.getPostYear());
-        model.addAttribute("comments", book.getComments());
+        model.addAttribute("bookId", book.getId());
+        model.addAttribute("bookTitle", book.getTitle());
+        model.addAttribute("bookSummary", book.getSummary());
+        model.addAttribute("bookAuthor", book.getAuthor());
+        model.addAttribute("bookPostYear", book.getPostYear());
+        model.addAttribute("bookHasComments", book.hasComments());
+        model.addAttribute("bookComments", book.getComments());
         return "book";
     }
 
