@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html>
 <body>
+
+    <h3>Books:</h3>
+    {{#books}}
+    <a href="books/{{id}}">{{title}}</a><br>
+    {{/books}}
+
+    {{^books}}
+    <p>There are no books yet!</p>
+    {{/books}}
+
+    <br>
+    <a href="new_book.html">New book</a>
 
 </body>
 </html>
