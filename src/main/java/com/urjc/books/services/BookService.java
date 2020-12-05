@@ -32,8 +32,8 @@ public class BookService {
         return this.bookRepository.delete(id);
     }
 
-    public void save(Book book) {
-        this.bookRepository.save(book);
+    public Book save(Book book) {
+        return this.bookRepository.save(book);
     }
 
 }

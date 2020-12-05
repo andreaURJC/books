@@ -33,10 +33,11 @@ public class BookRepository {
         return books.remove(id);
     }
 
-    public void save(Book book) {
+    public Book save(Book book) {
         int id = this.getIdAndAdd();
         book.setId(id);
         this.books.put(id, book);
+        return book;
     }
 
     private int getIdAndAdd() {
