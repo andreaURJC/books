@@ -45,6 +45,7 @@ public class RestApiController {
                             )}
             )
     })
+    @JsonView(Book.IndexList.class)
     @GetMapping("/books")
     public List<Book> getBooks() {
         return this.bookService.findAll();
