@@ -15,12 +15,16 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
 
+    public Comment findById(int commentId) {
+        return this.commentRepository.findById(commentId);
+    }
+
     public List<Comment> findByBookId(int bookId) {
         return this.commentRepository.findByBookId(bookId);
     }
 
-    public void save(Comment comment) {
-        this.commentRepository.save(comment);
+    public Comment save(Comment comment) {
+        return this.commentRepository.save(comment);
     }
 
     public Comment delete(int commentId) {
