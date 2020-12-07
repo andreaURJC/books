@@ -24,7 +24,9 @@ public class BookService {
 
     public Book findById(int id) {
         Book book = this.bookRepository.findById(id);
-        book.setComments(this.commentService.findByBookId(book.getId()));
+        if (book != null) {
+            book.setComments(this.commentService.findByBookId(book.getId()));
+        }
         return book;
     }
 

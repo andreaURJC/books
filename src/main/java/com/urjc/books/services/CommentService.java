@@ -30,4 +30,9 @@ public class CommentService {
     public Comment delete(int commentId) {
         return this.commentRepository.delete(commentId);
     }
+
+    public Comment findByIdAndBookId(int bookId, int commentId) {
+        List<Comment> comments = this.findByBookId(bookId);
+        return comments.stream().filter(comment -> comment.getId() == commentId).findFirst().orElse(null);
+    }
 }

@@ -123,14 +123,19 @@ public class RestApiController {
                     description = "Invalid comment supplied"
             )
     })
-    @PostMapping("/comments")
+    @PostMapping("/books/{bookId}/comments")
     public ResponseEntity<Comment> createComment(
+            @Parameter(description = "The book to be comented")
+            @PathVariable Integer bookId,
             @Parameter(description = "The comment to be created")
             @RequestBody Comment comment) {
-        comment = this.commentService.save(comment);
-        if (comment != null) {
-            URI location = fromCurrentRequest().path("/{id}").buildAndExpand(comment.getId()).toUri();
-            return ResponseEntity.created(location).body(comment);
+        comment.setBookId(bookId);
+        if (this.bookService.findById(bookId) != null) {
+            comment = this.commentService.save(comment);
+            if (comment != null) {
+                URI location = fromCurrentRequest().path("/{id}").buildAndExpand(comment.getId()).toUri();
+                return ResponseEntity.created(location).body(comment);
+            }
         }
         return ResponseEntity.badRequest().build();
     }
@@ -154,11 +159,13 @@ public class RestApiController {
                     description = "Comment not found"
             )
     })
-    @GetMapping("/comments/{commentId}")
+    @GetMapping("/books/{bookId}/comments/{commentId}")
     public ResponseEntity<Comment> getComment(
             @Parameter(description = "The id of the comment to be searched")
+            @PathVariable Integer bookId,
+            @Parameter(description = "The id of the comment to be searched")
             @PathVariable Integer commentId) {
-        Comment comment = this.commentService.findById(commentId);
+        Comment comment = this.commentService.findByIdAndBookId(bookId, commentId);
         if (comment != null) {
             return ResponseEntity.ok().body(comment);
         }
@@ -180,16 +187,17 @@ public class RestApiController {
                     description = "Comment already deleted"
             )
     })
-    @DeleteMapping("/comments/{commentId}")
+    @DeleteMapping("/books/{bookId}/comments/{commentId}")
     public ResponseEntity<Comment> deleteComment(
-            Model model,
+            @Parameter(description = "The id of the comment to be searched")
+            @PathVariable Integer bookId,
             @Parameter(description = "The id of the comment to be deleted")
             @PathVariable Integer commentId) {
-        Comment comment = this.commentService.delete(commentId);
+        Comment comment = this.commentService.findByIdAndBookId(bookId, commentId);
         if (comment != null) {
+            comment = this.commentService.delete(commentId);
             return ResponseEntity.ok(comment);
-        } else {
-            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.notFound().build();
     }
 }
