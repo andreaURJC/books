@@ -49,12 +49,14 @@ public class BookRepository {
                 "Kika Superbruja",
                 "Summary del libro",
                 "Autor de kika superr bruja",
+                "Anaya",
                 1990,
                 new ArrayList<>());
         Book losPilaresDeLaTierraBook = new Book(getIdAndAdd(),
                 "Los pilares de la tierra",
                 "Novela ambientada en la edad media",
                 "Ken Follett",
+                "Grupo Planeta",
                 1990,
                 new ArrayList<>());
         books.put(kikaSuperBrujaBook.getId(), kikaSuperBrujaBook);

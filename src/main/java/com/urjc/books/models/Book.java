@@ -23,6 +23,7 @@ public class Book {
     private String title;
     private String summary;
     private String author;
+    private String publisher;
     private int postYear;
     private List<Comment> comments = new ArrayList<>();
 }
