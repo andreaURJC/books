@@ -34,7 +34,7 @@ public class RestApiController {
         this.commentService = commentService;
     }
     
-    @Operation(summary = "Gets all books")
+    @Operation(summary = "Get all books")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -51,7 +51,7 @@ public class RestApiController {
         return this.bookService.findAll();
     }
 
-    @Operation(summary = "Gets a book by its id")
+    @Operation(summary = "Get a book by its id")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -81,7 +81,7 @@ public class RestApiController {
         return ResponseEntity.notFound().build();
     }
 
-    @Operation(summary = "Creates a book")
+    @Operation(summary = "Create a book")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
@@ -108,7 +108,7 @@ public class RestApiController {
         return ResponseEntity.badRequest().build();
     }
 
-    @Operation(summary = "Creates a comment")
+    @Operation(summary = "Create a comment")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
@@ -125,7 +125,7 @@ public class RestApiController {
     })
     @PostMapping("/books/{bookId}/comments")
     public ResponseEntity<Comment> createComment(
-            @Parameter(description = "The book to be comented")
+            @Parameter(description = "The book to be commented")
             @PathVariable Integer bookId,
             @Parameter(description = "The comment to be created")
             @RequestBody Comment comment) {
@@ -140,7 +140,7 @@ public class RestApiController {
         return ResponseEntity.badRequest().build();
     }
 
-    @Operation(summary = "Gets a comment by its id")
+    @Operation(summary = "Get a comment by its id")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -161,7 +161,7 @@ public class RestApiController {
     })
     @GetMapping("/books/{bookId}/comments/{commentId}")
     public ResponseEntity<Comment> getComment(
-            @Parameter(description = "The id of the comment to be searched")
+            @Parameter(description = "The id of the book")
             @PathVariable Integer bookId,
             @Parameter(description = "The id of the comment to be searched")
             @PathVariable Integer commentId) {
@@ -172,7 +172,7 @@ public class RestApiController {
         return ResponseEntity.notFound().build();
     }
 
-    @Operation(summary = "Deletes a comment by its id")
+    @Operation(summary = "Delete a comment by its id")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -189,7 +189,7 @@ public class RestApiController {
     })
     @DeleteMapping("/books/{bookId}/comments/{commentId}")
     public ResponseEntity<Comment> deleteComment(
-            @Parameter(description = "The id of the comment to be searched")
+            @Parameter(description = "The id of book")
             @PathVariable Integer bookId,
             @Parameter(description = "The id of the comment to be deleted")
             @PathVariable Integer commentId) {
