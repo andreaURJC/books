@@ -35,6 +35,8 @@ public class UserRepository {
         return this.findUserByNick(user.getNick());
     }
 
+    //TODO --> delete User solo si no tiene comentarios asociados
+
     private int getIdAndAdd() {
         return this.atomicInt.getAndAdd(1);
     }
