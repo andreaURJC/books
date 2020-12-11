@@ -13,8 +13,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void save(User user) {
-        this.userRepository.save(user);
+    public Optional<User> save(User user) {
+        return this.userRepository.save(user);
     }
 
     public Optional<List<User>> findAll() {

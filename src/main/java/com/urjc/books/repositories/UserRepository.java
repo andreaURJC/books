@@ -12,11 +12,11 @@ public class UserRepository {
     private AtomicInteger atomicInt = new AtomicInteger();
     private ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();
 
-    public void save(User user) {
+    public Optional<User> save(User user) {
         int nick = this.getIdAndAdd();
         user.setNick(nick);
 
-        users.put(nick, user);
+        return Optional.of(users.put(nick, user));
     }
 
     public Optional<User> findUserByNick(int nick) {
