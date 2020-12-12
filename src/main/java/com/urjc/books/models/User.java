@@ -5,12 +5,29 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class User {
-    // El nick sera un string unico en la practica
+
+    @Id
     private int nick;
     private String email;
+
+    public int getNick() {
+        return nick;
+    }
+
+    public void setNick(int nick) {
+        this.nick = nick;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

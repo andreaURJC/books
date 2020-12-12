@@ -1,9 +1,6 @@
 package com.urjc.books.models;
 
-import lombok.*;
-
 import javax.persistence.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
 public class Comment {

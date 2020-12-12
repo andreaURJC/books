@@ -1,14 +1,8 @@
 package com.urjc.books.models;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,11 +13,13 @@ public class Book {
     @JsonView(IndexList.class)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
 
     @JsonView(IndexList.class)
     private String title;
+
+    @Column(length = 400)
     private String summary;
     private String author;
     private String publisher;
@@ -32,11 +28,11 @@ public class Book {
     @OneToMany(mappedBy = "book", orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -2,10 +2,10 @@ package com.urjc.books.services;
 
 import com.urjc.books.models.Book;
 import com.urjc.books.repositories.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookService {
@@ -22,16 +22,12 @@ public class BookService {
         return this.bookRepository.findAll();
     }
 
-    public Book findById(int id) {
-        Book book = this.bookRepository.findById(id);
-        if (book != null) {
-            book.setComments(this.commentService.findByBookId(book.getId()));
-        }
-        return book;
+    public Optional<Book> findById(Long id) {
+        return this.bookRepository.findById(id);
     }
 
-    public Book delete(int id) {
-        return this.bookRepository.delete(id);
+    public void delete(Long id) {
+        this.bookRepository.deleteById(id);
     }
 
     public Book save(Book book) {
