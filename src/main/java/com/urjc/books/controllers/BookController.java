@@ -24,17 +24,16 @@ import java.util.Optional;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
-@RestController("/books")
+@RestController
+@RequestMapping("/books")
 public class BookController {
 
     private BookService bookService;
     private CommentService commentService;
-    private UserService userService;
 
-    public BookController(BookService bookService, CommentService commentService, UserService userService) {
+    public BookController(BookService bookService, CommentService commentService) {
         this.bookService = bookService;
         this.commentService = commentService;
-        this.userService = userService;
     }
 
     @PostConstruct
@@ -259,85 +258,4 @@ public class BookController {
         }
         return ResponseEntity.of(comment);
     }
-
-    @Operation(summary = "Create a user")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "User created",
-                    content = {@Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = User.class)
-                    )}
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid user supplied"
-            )
-    })
-    @PostMapping("/users")
-    public ResponseEntity<User> createUser(
-            @Parameter(description = "The user to be created")
-            @RequestBody User user) {
-        Optional<User> newUser = this.userService.save(user);
-        if (newUser.isPresent()) {
-            URI location = fromCurrentRequest().path("/{nick}").buildAndExpand(newUser.get().getNick()).toUri();
-            return ResponseEntity.created(location).body(newUser.get());
-        }
-        return ResponseEntity.badRequest().build();
-    }
-
-    @Operation(summary = "Get a user by the nick")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "User found",
-                    content = {@Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = User.class)
-                    )}
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid id supplied"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "User not found"
-            )
-    })
-    @GetMapping("/users/{nick}")
-    public ResponseEntity<User> getUser(
-            @Parameter(description = "The nick of the user to be searched")
-            @PathVariable int nick) {
-        Optional<User> user = this.userService.findUserByNick(nick);
-        if (user.isPresent()) {
-            return ResponseEntity.ok().body(user.get());
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @Operation(summary = "Get all users")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Users found",
-                    content = {@Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = User.class)
-                    )}
-            )
-    })
-    @JsonView(Book.IndexList.class)
-    @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers() {
-        Optional<List<User>> users = this.userService.findAll();
-        
-        if(users.isPresent()) {
-            return ResponseEntity.ok().body(users.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
 }

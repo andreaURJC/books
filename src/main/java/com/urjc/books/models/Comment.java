@@ -1,5 +1,7 @@
 package com.urjc.books.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,7 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bookId")
+    @JsonIgnore
     private Book book;
 
     public int getId() {
