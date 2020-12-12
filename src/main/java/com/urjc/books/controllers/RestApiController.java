@@ -134,7 +134,7 @@ public class RestApiController {
             @PathVariable Integer bookId,
             @Parameter(description = "The comment to be created")
             @RequestBody Comment comment) {
-        comment.setBookId(bookId);
+        //comment.setBookId(bookId);
         if (this.bookService.findById(bookId) != null) {
             comment = this.commentService.save(comment);
             if (comment != null) {

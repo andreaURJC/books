@@ -1,6 +1,7 @@
 package com.urjc.books.repositories;
 
 import com.urjc.books.models.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Repository
 public class UserRepository {
     private AtomicInteger atomicInt = new AtomicInteger();
     private ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();

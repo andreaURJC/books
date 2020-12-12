@@ -2,10 +2,12 @@ package com.urjc.books.services;
 
 import com.urjc.books.models.User;
 import com.urjc.books.repositories.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class UserService {
     private UserRepository userRepository;
 
