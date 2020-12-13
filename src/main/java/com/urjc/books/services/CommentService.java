@@ -1,5 +1,7 @@
 package com.urjc.books.services;
 
+import com.urjc.books.models.dtos.in.PostCommentInDto;
+import com.urjc.books.models.entities.Book;
 import com.urjc.books.models.entities.Comment;
 import com.urjc.books.models.entities.User;
 import com.urjc.books.repositories.CommentRepository;
@@ -25,7 +27,12 @@ public class CommentService {
         return this.commentRepository.findByBookId(bookId);
     }
 
-    public Optional<Comment> save(Comment comment) {
+    public Optional<Comment> save(PostCommentInDto inDto, Book book, User user) {
+        Comment comment = new Comment();
+        comment.setBook(book);
+        comment.setAuthor(user);
+        comment.setScore(inDto.getScore());
+        comment.setText(inDto.getText());
         return Optional.of(this.commentRepository.save(comment));
     }
 

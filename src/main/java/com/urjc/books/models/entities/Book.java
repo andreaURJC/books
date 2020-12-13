@@ -7,16 +7,11 @@ import java.util.List;
 
 @Entity
 public class Book {
-    public interface IndexList {}
 
-    //TODO: Refactor: Quitar la interfaz IndexList y hacer que devuelva un DTO
-    @JsonView(IndexList.class)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-
-    @JsonView(IndexList.class)
     private String title;
 
     @Column(length = 400)

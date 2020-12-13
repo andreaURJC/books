@@ -1,5 +1,6 @@
 package com.urjc.books.services;
 
+import com.urjc.books.models.dtos.out.CommentByUserOutDto;
 import com.urjc.books.models.dtos.out.GetCommentsByUserOutDto;
 import com.urjc.books.models.entities.Comment;
 import com.urjc.books.models.entities.User;
@@ -21,8 +22,12 @@ public class UserService {
         return Optional.of(this.userRepository.save(user));
     }
 
-    public Optional<User> findById(String nick) {
-        return this.userRepository.findById(nick);
+    public Optional<User> findById(Long userId) {
+        return this.userRepository.findById(userId);
+    }
+
+    public Optional<User> findByNick(String nick) {
+        return this.userRepository.findByNick(nick);
     }
 
     public void delete(User user) {
@@ -32,9 +37,9 @@ public class UserService {
     public GetCommentsByUserOutDto getCommentsByUser(User user) {
         GetCommentsByUserOutDto outDto = new GetCommentsByUserOutDto();
         outDto.setUserNick(user.getNick());
-        GetCommentsByUserOutDto.CommentByUserOutDto newComment;
+        CommentByUserOutDto newComment;
         for (Comment comment : user.getComments()) {
-            newComment = GetCommentsByUserOutDto.CommentByUserOutDto
+            newComment = CommentByUserOutDto
                             .builder()
                             .text(comment.getText())
                             .score(comment.getScore())

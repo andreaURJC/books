@@ -1,11 +1,15 @@
 package com.urjc.books.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
+import com.urjc.books.models.dtos.in.PostCommentInDto;
+import com.urjc.books.models.dtos.out.CommentBookOutDto;
+import com.urjc.books.models.dtos.out.GetAllBooksOutDto;
+import com.urjc.books.models.dtos.out.GetBookOutDto;
 import com.urjc.books.models.entities.Book;
 import com.urjc.books.models.entities.Comment;
 import com.urjc.books.models.entities.User;
 import com.urjc.books.services.BookService;
 import com.urjc.books.services.CommentService;
+import com.urjc.books.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,8 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
@@ -29,10 +33,12 @@ public class BookController {
 
     private BookService bookService;
     private CommentService commentService;
+    private UserService userService;
 
-    public BookController(BookService bookService, CommentService commentService) {
+    public BookController(BookService bookService, CommentService commentService, UserService userService) {
         this.bookService = bookService;
         this.commentService = commentService;
+        this.userService = userService;
     }
 
     @PostConstruct
@@ -56,26 +62,35 @@ public class BookController {
         losPilaresDeLaTierraBook.setPublisher("Grupo Planeta");
         losPilaresDeLaTierraBook.setPostYear(1990);
 
+        User andrea = new User();
+        andrea.setNick("Andrea");
+        andrea.setEmail("andea@urjc.es");
+        andrea = this.userService.save(andrea).get();
+
         Comment andreaComment = new Comment();
-        andreaComment.setAuthor(new User());
-        andreaComment.getAuthor().setNick("Andrea");
-        andreaComment.getAuthor().setEmail("andea@urjc.es");
+        andreaComment.setAuthor(andrea);
         andreaComment.setText("Me encanta leer, pedazo de libro");
         andreaComment.setScore(5);
         andreaComment.setBook(kikaSuperBrujaBook);
 
+        User juanma = new User();
+        juanma.setNick("Juanma");
+        juanma.setEmail("juanma@urjc.es");
+        juanma = this.userService.save(juanma).get();
+
         Comment juanmaComment = new Comment();
-        juanmaComment.setAuthor(new User());
-        juanmaComment.getAuthor().setNick("Juanma");
-        juanmaComment.getAuthor().setEmail("juanma@urjc.es");
+        juanmaComment.setAuthor(juanma);
         juanmaComment.setText("El mejor libro que he leído nunca");
         juanmaComment.setScore(1);
         juanmaComment.setBook(kikaSuperBrujaBook);
 
+        User antonio = new User();
+        antonio.setNick("Antonio");
+        antonio.setEmail("antonio@urjc.es");
+        antonio = this.userService.save(antonio).get();
+
         Comment antonioComment = new Comment();
-        antonioComment.setAuthor(new User());
-        antonioComment.getAuthor().setNick("Antonio");
-        antonioComment.getAuthor().setEmail("antonio@urjc.es");
+        antonioComment.setAuthor(antonio);
         antonioComment.setText("Un poco rara la historia, pero entretenida");
         antonioComment.setScore(4);
         antonioComment.setBook(kikaSuperBrujaBook);
@@ -83,18 +98,24 @@ public class BookController {
         var comentariosKika = Arrays.asList(andreaComment, juanmaComment, antonioComment);
         kikaSuperBrujaBook.setComments(comentariosKika);
 
+        User nacho = new User();
+        nacho.setNick("Nacho");
+        nacho.setEmail("nacho@urjc.es");
+        nacho = this.userService.save(nacho).get();
+
         Comment nachoComment = new Comment();
-        nachoComment.setAuthor(new User());
-        nachoComment.getAuthor().setNick("Nacho");
-        nachoComment.getAuthor().setEmail("nacho@urjc.es");
+        nachoComment.setAuthor(nacho);
         nachoComment.setText("Buen libro para los viajes entre partido y partido");
         nachoComment.setScore(4);
         nachoComment.setBook(losPilaresDeLaTierraBook);
 
+        User elisa = new User();
+        elisa.setNick("Elisa");
+        elisa.setEmail("elisa@urjc.es");
+        elisa = this.userService.save(elisa).get();
+
         Comment elisaComment = new Comment();
-        elisaComment.setAuthor(new User());
-        elisaComment.getAuthor().setNick("Elisa");
-        elisaComment.getAuthor().setEmail("elisa@urjc.es");
+        elisaComment.setAuthor(elisa);
         elisaComment.setText("Me ha ayudado mucho a relajarme");
         elisaComment.setScore(5);
         elisaComment.setBook(losPilaresDeLaTierraBook);
@@ -117,9 +138,8 @@ public class BookController {
                             )}
             )
     })
-    @JsonView(Book.IndexList.class)
-    @GetMapping("/")
-    public List<Book> getBooks() {
+    @GetMapping()
+    public GetAllBooksOutDto getBooks() {
         return this.bookService.findAll();
     }
 
@@ -143,13 +163,39 @@ public class BookController {
             )
     })
     @GetMapping("/{bookId}")
-    public ResponseEntity<Book> getBook(
+    public ResponseEntity<GetBookOutDto> getBook(
             @Parameter(description = "The id of the book to be searched")
             @PathVariable Long bookId) {
-        // TODO : Crear un dto para devolver el libro con sus atributos y de los comentarios SOLO el texto, el nick y el email del Usuario
-        Optional<Book> book = this.bookService.findById(bookId);
 
-        return ResponseEntity.of(book);
+        Optional<Book> book = this.bookService.findById(bookId);
+        GetBookOutDto outDto = new GetBookOutDto();
+
+        if (book.isPresent()) {
+
+            outDto = GetBookOutDto.builder()
+                    .id(book.get().getId())
+                    .title(book.get().getTitle())
+                    .summary(book.get().getSummary())
+                    .author(book.get().getAuthor())
+                    .publisher(book.get().getPublisher())
+                    .postYear(book.get().getPostYear())
+                    .comments(new ArrayList<>())
+                    .build();
+
+            CommentBookOutDto commentDto;
+            for (Comment comment : book.get().getComments()) {
+                User author = comment.getAuthor();
+                commentDto = CommentBookOutDto.builder()
+                        .text(comment.getText())
+                        .nick(author.getNick())
+                        .email(author.getEmail())
+                        .build();
+                outDto.getComments().add(commentDto);
+            }
+            return ResponseEntity.ok(outDto);
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @Operation(summary = "Create a book")
@@ -167,7 +213,7 @@ public class BookController {
                     description = "Invalid book supplied"
             )
     })
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Book> createBook(
             @Parameter(description = "The book to be created")
             @RequestBody Book book) {
@@ -199,14 +245,13 @@ public class BookController {
             @Parameter(description = "The book to be commented")
             @PathVariable Long bookId,
             @Parameter(description = "The comment to be created")
-            @RequestBody Comment comment) {
-        // TODO : Crear DTO al que le pasemos además el nick del usuario que debe existir en la BBDD
-        Optional<Book> book = this.bookService.findById(bookId);
-        if (book.isPresent()) {
-            comment.setBook(book.get());
-            Optional<Comment> savedComment = this.commentService.save(comment);
+            @RequestBody PostCommentInDto inDto) {
+        var book = this.bookService.findById(bookId);
+        var user = this.userService.findByNick(inDto.getNick());
+        if (book.isPresent() && user.isPresent()) {
+            var savedComment = this.commentService.save(inDto, book.get(), user.get());
             if (savedComment.isPresent()) {
-                URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedComment.get().getId()).toUri();
+                var location = fromCurrentRequest().path("/{id}").buildAndExpand(savedComment.get().getId()).toUri();
                 return ResponseEntity.created(location).body(savedComment.get());
             }
         }

@@ -12,13 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 public class GetCommentsByUserOutDto {
 
-    @Builder
-    public class CommentByUserOutDto {
-        private String text;
-        private int score;
-        private Long bookId;
-    }
-
     private String userNick;
     private List<CommentByUserOutDto> comments = new ArrayList<>();
 }

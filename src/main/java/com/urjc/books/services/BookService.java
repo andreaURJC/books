@@ -1,10 +1,11 @@
 package com.urjc.books.services;
 
+import com.urjc.books.models.dtos.out.BookOutDto;
+import com.urjc.books.models.dtos.out.GetAllBooksOutDto;
 import com.urjc.books.models.entities.Book;
 import com.urjc.books.repositories.BookRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,8 +19,19 @@ public class BookService {
         this.commentService = commentService;
     }
 
-    public List<Book> findAll() {
-        return this.bookRepository.findAll();
+    public GetAllBooksOutDto findAll() {
+        GetAllBooksOutDto outDto = new GetAllBooksOutDto();
+        var books = this.bookRepository.findAll();
+        BookOutDto bookDto;
+        for (Book book : books) {
+            bookDto = BookOutDto.builder()
+                    .id(book.getId())
+                    .title(book.getTitle())
+                    .build();
+            outDto.getBooks().add(bookDto);
+        }
+
+        return outDto;
     }
 
     public Optional<Book> findById(Long id) {

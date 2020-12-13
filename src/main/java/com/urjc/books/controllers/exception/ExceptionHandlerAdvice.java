@@ -11,7 +11,7 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(ExistingEntitiesAssociatedException.class)
     public ResponseEntity handleException(ExistingEntitiesAssociatedException e) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(e.getAssociatedEntity());
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(e.getMessage());
     }
 }
