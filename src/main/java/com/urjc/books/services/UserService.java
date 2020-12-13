@@ -1,6 +1,8 @@
 package com.urjc.books.services;
 
-import com.urjc.books.models.User;
+import com.urjc.books.models.dtos.out.GetCommentsByUserOutDto;
+import com.urjc.books.models.entities.Comment;
+import com.urjc.books.models.entities.User;
 import com.urjc.books.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,18 +18,30 @@ public class UserService {
     }
 
     public Optional<User> save(User user) {
-        return this.userRepository.save(user);
+        return Optional.of(this.userRepository.save(user));
     }
 
-    public Optional<List<User>> findAll() {
-        return this.userRepository.findAll();
+    public Optional<User> findById(String nick) {
+        return this.userRepository.findById(nick);
     }
 
-    public Optional<User> findUserByNick(int nick) {
-        return this.userRepository.findUserByNick(nick);
+    public void delete(User user) {
+        this.userRepository.delete(user);
     }
 
-    public Optional<User> modifyEmail(User user) {
-        return this.userRepository.modifyEmail(user);
+    public GetCommentsByUserOutDto getCommentsByUser(User user) {
+        GetCommentsByUserOutDto outDto = new GetCommentsByUserOutDto();
+        outDto.setUserNick(user.getNick());
+        GetCommentsByUserOutDto.CommentByUserOutDto newComment;
+        for (Comment comment : user.getComments()) {
+            newComment = GetCommentsByUserOutDto.CommentByUserOutDto
+                            .builder()
+                            .text(comment.getText())
+                            .score(comment.getScore())
+                            .bookId(comment.getBook().getId())
+                            .build();
+            outDto.getComments().add(newComment);
+        }
+        return outDto;
     }
 }

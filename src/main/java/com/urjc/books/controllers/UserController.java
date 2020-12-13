@@ -1,8 +1,11 @@
 package com.urjc.books.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.urjc.books.models.Book;
-import com.urjc.books.models.User;
+import com.urjc.books.controllers.exception.ExistingEntitiesAssociatedException;
+import com.urjc.books.models.dtos.in.UpdateUserEmailInDto;
+import com.urjc.books.models.dtos.out.GetCommentsByUserOutDto;
+import com.urjc.books.models.entities.Comment;
+import com.urjc.books.models.entities.User;
+import com.urjc.books.services.CommentService;
 import com.urjc.books.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,8 +14,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +30,11 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 public class UserController {
 
     private UserService userService;
+    private CommentService commentService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, CommentService commentService) {
         this.userService = userService;
+        this.commentService = commentService;
     }
     @Operation(summary = "Create a user")
     @ApiResponses(value = {
@@ -43,7 +51,7 @@ public class UserController {
                     description = "Invalid user supplied"
             )
     })
-    @PostMapping("/users")
+    @PostMapping("/")
     public ResponseEntity<User> createUser(
             @Parameter(description = "The user to be created")
             @RequestBody User user) {
@@ -74,37 +82,49 @@ public class UserController {
                     description = "User not found"
             )
     })
-    @GetMapping("/users/{nick}")
+    @GetMapping("/{nick}")
     public ResponseEntity<User> getUser(
             @Parameter(description = "The nick of the user to be searched")
-            @PathVariable int nick) {
-        Optional<User> user = this.userService.findUserByNick(nick);
-        if (user.isPresent()) {
-            return ResponseEntity.ok().body(user.get());
-        }
-        return ResponseEntity.notFound().build();
+            @PathVariable String nick) {
+        Optional<User> user = this.userService.findById(nick);
+        return ResponseEntity.of(user);
     }
 
-    @Operation(summary = "Get all users")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Users found",
-                    content = {@Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = User.class)
-                    )}
-            )
-    })
-    @JsonView(Book.IndexList.class)
-    @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers() {
-        Optional<List<User>> users = this.userService.findAll();
-
-        if(users.isPresent()) {
-            return ResponseEntity.ok().body(users.get());
-        } else {
-            return ResponseEntity.notFound().build();
+    @PatchMapping("/{nick}")
+    public ResponseEntity<User> updateEmail(
+            @PathVariable String nick,
+            @RequestBody @Valid UpdateUserEmailInDto inDto) {
+        Optional<User> user = this.userService.findById(nick);
+        if (user.isPresent()) {
+            user.get().setEmail(inDto.getEmail());
+            this.userService.save(user.get());
         }
+        return ResponseEntity.of(user);
+    }
+
+    @DeleteMapping("/{nick}")
+    public ResponseEntity<User> deleteUser(@PathVariable String nick) throws ExistingEntitiesAssociatedException {
+        Optional<User> user = this.userService.findById(nick);
+        if (user.isPresent()) {
+            List<Comment> comments = this.commentService.findByUser(user.get());
+            if (CollectionUtils.isEmpty(comments)) {
+                this.userService.delete(user.get());
+            } else {
+                throw new ExistingEntitiesAssociatedException("comments");
+            }
+        }
+        return ResponseEntity.of(user);
+    }
+
+    @GetMapping("/{nick}/comments")
+    public ResponseEntity<GetCommentsByUserOutDto> getCommentsByUser(
+            @Parameter(description = "The nick of the user to be searched")
+            @PathVariable String nick) {
+        Optional<User> user = this.userService.findById(nick);
+        if (user.isPresent()) {
+            GetCommentsByUserOutDto outDto = this.userService.getCommentsByUser(user.get());
+            return ResponseEntity.ok().body(outDto);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

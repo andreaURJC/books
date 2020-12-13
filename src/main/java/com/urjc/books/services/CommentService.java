@@ -1,6 +1,7 @@
 package com.urjc.books.services;
 
-import com.urjc.books.models.Comment;
+import com.urjc.books.models.entities.Comment;
+import com.urjc.books.models.entities.User;
 import com.urjc.books.repositories.CommentRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +25,8 @@ public class CommentService {
         return this.commentRepository.findByBookId(bookId);
     }
 
-    public Comment save(Comment comment) {
-        return this.commentRepository.save(comment);
+    public Optional<Comment> save(Comment comment) {
+        return Optional.of(this.commentRepository.save(comment));
     }
 
     public void delete(Long commentId) {
@@ -35,5 +36,9 @@ public class CommentService {
     public Optional<Comment> findByIdAndBookId(Long bookId, Long commentId) {
         List<Comment> comments = this.findByBookId(bookId);
         return comments.stream().filter(comment -> comment.getId() == commentId).findFirst();
+    }
+
+    public List<Comment> findByUser(User author) {
+        return this.commentRepository.findByAuthor(author);
     }
 }

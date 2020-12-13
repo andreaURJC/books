@@ -1,4 +1,4 @@
-package com.urjc.books.models;
+package com.urjc.books.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonView;
 

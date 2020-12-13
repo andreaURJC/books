@@ -1,6 +1,6 @@
 package com.urjc.books.services;
 
-import com.urjc.books.models.Book;
+import com.urjc.books.models.entities.Book;
 import com.urjc.books.repositories.BookRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +30,8 @@ public class BookService {
         this.bookRepository.deleteById(id);
     }
 
-    public Book save(Book book) {
-        return this.bookRepository.save(book);
+    public Optional<Book> save(Book book) {
+        return Optional.of(this.bookRepository.save(book));
     }
 
 }

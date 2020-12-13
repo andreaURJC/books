@@ -1,12 +1,11 @@
 package com.urjc.books.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.urjc.books.models.Book;
-import com.urjc.books.models.Comment;
-import com.urjc.books.models.User;
+import com.urjc.books.models.entities.Book;
+import com.urjc.books.models.entities.Comment;
+import com.urjc.books.models.entities.User;
 import com.urjc.books.services.BookService;
 import com.urjc.books.services.CommentService;
-import com.urjc.books.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -58,19 +57,25 @@ public class BookController {
         losPilaresDeLaTierraBook.setPostYear(1990);
 
         Comment andreaComment = new Comment();
-        andreaComment.setAuthor("Andrea");
+        andreaComment.setAuthor(new User());
+        andreaComment.getAuthor().setNick("Andrea");
+        andreaComment.getAuthor().setEmail("andea@urjc.es");
         andreaComment.setText("Me encanta leer, pedazo de libro");
         andreaComment.setScore(5);
         andreaComment.setBook(kikaSuperBrujaBook);
 
         Comment juanmaComment = new Comment();
-        juanmaComment.setAuthor("Juanma");
+        juanmaComment.setAuthor(new User());
+        juanmaComment.getAuthor().setNick("Juanma");
+        juanmaComment.getAuthor().setEmail("juanma@urjc.es");
         juanmaComment.setText("El mejor libro que he leído nunca");
         juanmaComment.setScore(1);
         juanmaComment.setBook(kikaSuperBrujaBook);
 
         Comment antonioComment = new Comment();
-        antonioComment.setAuthor("Antonio");
+        antonioComment.setAuthor(new User());
+        antonioComment.getAuthor().setNick("Antonio");
+        antonioComment.getAuthor().setEmail("antonio@urjc.es");
         antonioComment.setText("Un poco rara la historia, pero entretenida");
         antonioComment.setScore(4);
         antonioComment.setBook(kikaSuperBrujaBook);
@@ -79,13 +84,17 @@ public class BookController {
         kikaSuperBrujaBook.setComments(comentariosKika);
 
         Comment nachoComment = new Comment();
-        nachoComment.setAuthor("Nacho");
+        nachoComment.setAuthor(new User());
+        nachoComment.getAuthor().setNick("Nacho");
+        nachoComment.getAuthor().setEmail("nacho@urjc.es");
         nachoComment.setText("Buen libro para los viajes entre partido y partido");
         nachoComment.setScore(4);
         nachoComment.setBook(losPilaresDeLaTierraBook);
 
         Comment elisaComment = new Comment();
-        elisaComment.setAuthor("Elisa");
+        elisaComment.setAuthor(new User());
+        elisaComment.getAuthor().setNick("Elisa");
+        elisaComment.getAuthor().setEmail("elisa@urjc.es");
         elisaComment.setText("Me ha ayudado mucho a relajarme");
         elisaComment.setScore(5);
         elisaComment.setBook(losPilaresDeLaTierraBook);
@@ -137,6 +146,7 @@ public class BookController {
     public ResponseEntity<Book> getBook(
             @Parameter(description = "The id of the book to be searched")
             @PathVariable Long bookId) {
+        // TODO : Crear un dto para devolver el libro con sus atributos y de los comentarios SOLO el texto, el nick y el email del Usuario
         Optional<Book> book = this.bookService.findById(bookId);
 
         return ResponseEntity.of(book);
@@ -161,10 +171,10 @@ public class BookController {
     public ResponseEntity<Book> createBook(
             @Parameter(description = "The book to be created")
             @RequestBody Book book) {
-        book = this.bookService.save(book);
-        if (book != null) {
-            URI location = fromCurrentRequest().path("/{id}").buildAndExpand(book.getId()).toUri();
-            return ResponseEntity.created(location).body(book);
+        Optional<Book> savedBook = this.bookService.save(book);
+        if (savedBook.isPresent()) {
+            URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedBook.get().getId()).toUri();
+            return ResponseEntity.created(location).body(savedBook.get());
         }
         return ResponseEntity.badRequest().build();
     }
@@ -190,13 +200,14 @@ public class BookController {
             @PathVariable Long bookId,
             @Parameter(description = "The comment to be created")
             @RequestBody Comment comment) {
+        // TODO : Crear DTO al que le pasemos además el nick del usuario que debe existir en la BBDD
         Optional<Book> book = this.bookService.findById(bookId);
         if (book.isPresent()) {
             comment.setBook(book.get());
-            this.commentService.save(comment);
-            if (comment != null) {
-                URI location = fromCurrentRequest().path("/{id}").buildAndExpand(comment.getId()).toUri();
-                return ResponseEntity.created(location).body(comment);
+            Optional<Comment> savedComment = this.commentService.save(comment);
+            if (savedComment.isPresent()) {
+                URI location = fromCurrentRequest().path("/{id}").buildAndExpand(savedComment.get().getId()).toUri();
+                return ResponseEntity.created(location).body(savedComment.get());
             }
         }
         return ResponseEntity.badRequest().build();

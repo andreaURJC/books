@@ -1,46 +1,10 @@
 package com.urjc.books.repositories;
 
-import com.urjc.books.models.User;
-import org.springframework.stereotype.Repository;
+import com.urjc.books.models.entities.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
-@Repository
-public class UserRepository {
-    private AtomicInteger atomicInt = new AtomicInteger();
-    private ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();
-
-    public Optional<User> save(User user) {
-        int nick = this.getIdAndAdd();
-        user.setNick(nick);
-
-        return Optional.of(users.put(nick, user));
-    }
-
-    public Optional<User> findUserByNick(int nick) {
-        return Optional.of(this.users.get(nick));
-    }
-
-    public Optional<List<User>> findAll() {
-        return Optional.of(new ArrayList<>(this.users.values()));
-    }
-
-    public Optional<User> modifyEmail(User user) {
-        Optional<User> existingUser = this.findUserByNick(user.getNick());
-        if (existingUser.isPresent()) {
-            this.users.put(user.getNick(), user);
-        }
-        return this.findUserByNick(user.getNick());
-    }
-
-    //TODO --> delete User solo si no tiene comentarios asociados
-
-    private int getIdAndAdd() {
-        return this.atomicInt.getAndAdd(1);
-    }
+public interface UserRepository extends JpaRepository<User, String> {
 
 }
