@@ -91,6 +91,25 @@ public class UserController {
         return ResponseEntity.of(user);
     }
 
+    @Operation(summary = "Update the user's email")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Email modified successfully",
+                    content = {@Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = User.class)
+                    )}
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid id supplied"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found"
+            )
+    })
     @PatchMapping("/{userId}")
     public ResponseEntity<User> updateEmail(
             @PathVariable Long userId,
@@ -103,6 +122,25 @@ public class UserController {
         return ResponseEntity.of(user);
     }
 
+    @Operation(summary = "Delete user by its id.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User deleted.",
+                    content = {@Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = User.class)
+                    )}
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid id supplied"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found"
+            )
+    })
     @DeleteMapping("/{userId}")
     public ResponseEntity<User> deleteUser(@PathVariable Long userId) throws ExistingEntitiesAssociatedException {
         Optional<User> user = this.userService.findById(userId);
@@ -117,6 +155,25 @@ public class UserController {
         return ResponseEntity.of(user);
     }
 
+    @Operation(summary = "Get comments of an user.")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Comments found.",
+                    content = {@Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = User.class)
+                    )}
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid id supplied"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found"
+            )
+    })
     @GetMapping("/{userId}/comments")
     public ResponseEntity<GetCommentsByUserOutDto> getCommentsByUser(
             @Parameter(description = "The nick of the user to be searched")
