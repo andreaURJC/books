@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class CommentByUserOutDto {
 
+    private Long id;
     private String text;
     private int score;
     private Long bookId;

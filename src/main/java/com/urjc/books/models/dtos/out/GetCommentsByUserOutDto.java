@@ -1,7 +1,9 @@
 package com.urjc.books.models.dtos.out;
 
-import com.urjc.books.models.entities.User;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,5 @@ import java.util.List;
 @AllArgsConstructor
 public class GetCommentsByUserOutDto {
 
-    private String userNick;
     private List<CommentByUserOutDto> comments = new ArrayList<>();
 }

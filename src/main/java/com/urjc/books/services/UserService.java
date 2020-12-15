@@ -36,11 +36,11 @@ public class UserService {
 
     public GetCommentsByUserOutDto getCommentsByUser(User user) {
         GetCommentsByUserOutDto outDto = new GetCommentsByUserOutDto();
-        outDto.setUserNick(user.getNick());
         CommentByUserOutDto newComment;
         for (Comment comment : user.getComments()) {
             newComment = CommentByUserOutDto
                             .builder()
+                            .id(comment.getId())
                             .text(comment.getText())
                             .score(comment.getScore())
                             .bookId(comment.getBook().getId())
